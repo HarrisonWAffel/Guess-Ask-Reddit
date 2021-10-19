@@ -1,0 +1,7 @@
+database:
+  host: "localhost"
+  port: "5432"
+  name: "guess"
+  password: "password123"
+  migration:
+    step: 0

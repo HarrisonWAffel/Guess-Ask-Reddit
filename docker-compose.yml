@@ -1,0 +1,31 @@
+services:
+#  web:
+#    build: ./frontend
+#    ports:
+#      - "8080:3000"
+#    volumes:
+#      - .:/code
+#      - logvolume01:/var/log
+#    links:
+#      - backend
+#
+#  backend:
+#    build: ./backend
+#    ports:
+#      - "8081:1337"
+
+  db:
+    image: postgres
+    restart: always
+    environment:
+      POSTGRES_DB: guess
+      POSTGRES_USER: guess
+      POSTGRES_PASSWORD: password123
+    ports:
+      - "5432:5432"
+    volumes:
+      - databaseData:/var/lib/postgresql/data/
+
+volumes:
+  databaseData: {}
+  logvolume01: {}
