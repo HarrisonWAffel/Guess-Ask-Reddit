@@ -41,7 +41,7 @@ func (s *service) AddGameResultToLeaderBoard(mode string, userID uuid.UUID, resu
 		Userid:            userID,
 		Mode:              mode,
 		Time: 			   time.Now(),
-		NumberOfQuestions: len(result.Posts),
+		NumberOfQuestions: result.TotalPosts,
 		Score:             result.NumberCorrect,
 		Posts:             postsJ,
 	}

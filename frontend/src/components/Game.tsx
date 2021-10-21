@@ -16,6 +16,7 @@ export interface GameI {
     numberCorrect: number
     currentPostIndex: number
     Posts: RedditPost[]
+    TotalPosts: number
     survivalOptions: SurvivalOptions | null
     isSurvival: boolean
 }
@@ -55,6 +56,7 @@ const Game: FC<UserStateI> = (state: UserStateI) => {
             currentGame: {
                 PostType: state.userState.currentGame!.PostType,
                 Posts: state.userState.currentGame!.Posts,
+                TotalPosts: state.userState.currentGame!.TotalPosts,
                 currentPostIndex: state.userState.currentGame!.currentPostIndex + 1,
                 numberCorrect: state.userState.currentGame!.numberCorrect,
                 survivalOptions: state.userState.currentGame!.survivalOptions,
@@ -86,6 +88,7 @@ const Game: FC<UserStateI> = (state: UserStateI) => {
                 PostType: state.userState.currentGame!.PostType,
                 Posts: posts,
                 currentPostIndex: 0,
+                TotalPosts: state.userState.currentGame!.TotalPosts + posts.length,
                 numberCorrect: state.userState.currentGame!.numberCorrect,
                 survivalOptions: {
                     lastPostIndex: newPostIndex,

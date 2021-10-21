@@ -129,6 +129,7 @@ const NewGame:FC<UserStateI> = (props: UserStateI) => {
                     Posts: posts,
                     currentPostIndex: 0,
                     numberCorrect: 0,
+                    TotalPosts: posts.length,
                     survivalOptions: survivalMode,
                     isSurvival: survivalMode !== null,
                 },

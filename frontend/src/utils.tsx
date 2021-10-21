@@ -147,6 +147,7 @@ export function DecrementSurvivalLives(state: UserStateI) {
             Posts: state.userState.currentGame!.Posts,
             currentPostIndex: state.userState.currentGame!.currentPostIndex,
             numberCorrect: state.userState.currentGame!.numberCorrect ,
+            TotalPosts: state.userState.currentGame!.TotalPosts,
             survivalOptions: {
                 lastPostIndex:  state.userState.currentGame!.survivalOptions!.lastPostIndex,
                 remainingLives: state.userState.currentGame!.survivalOptions!.remainingLives - 1,
@@ -168,6 +169,7 @@ export function IncrementScore(state: UserStateI) {
             currentPostIndex: state.userState.currentGame!.currentPostIndex,
             numberCorrect: state.userState.currentGame!.numberCorrect + 1,
             survivalOptions: state.userState.currentGame!.survivalOptions,
+            TotalPosts: state.userState.currentGame!.TotalPosts,
             isSurvival: state.userState.currentGame!.isSurvival,
         },
         email: state.userState.email,

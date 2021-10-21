@@ -107,7 +107,6 @@ const LeaderboardView: FC<UserStateI> = (state: UserStateI) => {
                         <Table.HeaderCell>Score</Table.HeaderCell>
                     </Table.Row>
                 </Table.Header>
-
                 <Table.Body>
                     {
                         normalLeaderboard.map((obj, id) => {

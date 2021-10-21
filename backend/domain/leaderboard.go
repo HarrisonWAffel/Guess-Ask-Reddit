@@ -11,6 +11,7 @@ import (
 type GameResult struct {
 	PostType string `json:"PostType"`
 	IsSurvival bool `json:"isSurvival"`
+	TotalPosts int `json:"TotalPosts"`
 	Posts    []struct {
 		ID       string `json:"ID"`
 		Comments []struct {
