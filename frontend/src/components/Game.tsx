@@ -72,7 +72,7 @@ const Game: FC<UserStateI> = (state: UserStateI) => {
 
     async function GetMorePostsForSurvivalMode() {
         setIsLoading(true);
-        let newPostIndex = state.userState.currentGame!.survivalOptions!.lastPostIndex + 5;
+        let newPostIndex = state.userState.currentGame!.survivalOptions!.lastPostIndex + state.userState.currentGame!.Posts.length;
         // get some more posts for survival mode
         let posts: RedditPost[] = await GetTopPostsFromSubreddit({
             postFilter: state.userState.currentGame!.PostType,

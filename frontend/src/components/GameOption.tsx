@@ -19,6 +19,11 @@ interface GameOptionI {
 }
 
 const GameOption: FC<GameOptionI> = (x: GameOptionI) => {
+    let pickme = <div></div>
+    if (x.comment.isCorrectAnswer) {
+        pickme = <div><p>PICK ME!</p></div>
+    }
+
     return <div>
         <Message attached negative={
                     x.showCommentKarma && !x.comment.isCorrectAnswer
@@ -32,6 +37,7 @@ const GameOption: FC<GameOptionI> = (x: GameOptionI) => {
                         <Segment>
                             <Container text style={{whiteSpace: "pre-wrap"}}>
                                 <h4><i>{x.comment.comment}</i></h4>
+                                {pickme}
                             </Container>
                         </Segment>
                     </GridRow>

@@ -5,12 +5,12 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="5508bf13-60f3-475d-bb65-060b17f74a2e" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/../backend/service/leaderboards/leaderboard.go" beforeDir="false" afterPath="$PROJECT_DIR$/../backend/service/leaderboards/leaderboard.go" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/App.test.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/App.test.tsx" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/components/Game.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/Game.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/GameOption.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/GameOption.tsx" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/components/LeaderboardView.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/LeaderboardView.tsx" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/components/newGame.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/newGame.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/utils.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/utils.tsx" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -93,7 +93,7 @@
       <workItem from="1634053676011" duration="14676000" />
       <workItem from="1634091101994" duration="8469000" />
       <workItem from="1634231964165" duration="40680000" />
-      <workItem from="1634664334085" duration="23152000" />
+      <workItem from="1634664334085" duration="27408000" />
     </task>
     <servers />
   </component>

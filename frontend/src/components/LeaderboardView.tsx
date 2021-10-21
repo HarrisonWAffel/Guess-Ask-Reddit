@@ -46,10 +46,13 @@ const LeaderboardView: FC<UserStateI> = (state: UserStateI) => {
                             setSurvivalLeaderBoard([noResultsItem]);
                         } else {
                             body.sort((a: LeaderboardResponse, b: LeaderboardResponse) => (a.score > b.score) ? -1 : 1)
+                            body = body.slice(0, 25);
                             setSurvivalLeaderBoard(body);
                         }
                         setSurvivalModeTableIsLoading(false);
-                    })
+                    }).catch(err => {
+                    setSurvivalModeTableIsLoading(false);
+                })
                 break;
             default:
                 GetLeaderboard("limited", state.userState.authToken).then(r => r.json())
@@ -62,16 +65,19 @@ const LeaderboardView: FC<UserStateI> = (state: UserStateI) => {
                             setNormalLeaderBoard([noResultsItem]);
                         } else {
                             body.sort((a: LeaderboardResponse, b: LeaderboardResponse) => (a.score > b.score) ? -1 : 1)
+                            body = body.slice(0, 25);
                             setNormalLeaderBoard(body);
                         }
                         setNormalModeTableIsLoading(false);
-                    })
+                    }).catch(err => {
+                        setNormalModeTableIsLoading(false);
+                })
         }
     }
 
     return <div>
         <Segment loading={survivalModeTableIsLoading}>
-            <Header style={{display: "inline"}} as={"h2"}> Survival Mode</Header>
+            <Header style={{display: "inline"}} as={"h2"}>Survival Mode (top 25)</Header>
             <Button style={{float: "right", display: "inline"}} icon={"sync alternate"} onClick={()=>{refreshLeaderBoard("survival")}}/>
             <Table celled>
             <Table.Header>
@@ -88,7 +94,7 @@ const LeaderboardView: FC<UserStateI> = (state: UserStateI) => {
                             <Table.Cell>
                                 {obj.username}
                             </Table.Cell>
-                            <Table.Cell>{obj.posts.length}</Table.Cell>
+                            <Table.Cell>{obj.number_of_questions}</Table.Cell>
                             <Table.Cell>{obj.score}</Table.Cell>
                         </Table.Row>
                     })
@@ -97,7 +103,7 @@ const LeaderboardView: FC<UserStateI> = (state: UserStateI) => {
             </Table>
         </Segment>
         <Segment loading={normalModeTableIsLoading}>
-            <Header style={{display: "inline"}} as={"h2"}>Normal Mode</Header>
+            <Header style={{display: "inline"}} as={"h2"}>Normal Mode (top 25)</Header>
             <Button style={{float: "right", display: "inline"}} icon={"sync alternate"} onClick={()=>{refreshLeaderBoard("")}}/>
             <Table celled>
                 <Table.Header>
@@ -114,7 +120,7 @@ const LeaderboardView: FC<UserStateI> = (state: UserStateI) => {
                                 <Table.Cell>
                                     {obj.username}
                                 </Table.Cell>
-                                <Table.Cell>{obj.posts.length}</Table.Cell>
+                                <Table.Cell>{obj.number_of_questions}</Table.Cell>
                                 <Table.Cell>{obj.score}</Table.Cell>
                             </Table.Row>
                         })
