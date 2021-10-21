@@ -1,7 +1,6 @@
 package auth
 
 import (
-	"HarrisonWAffel/guess-ask-reddit/config"
 	"HarrisonWAffel/guess-ask-reddit/controller"
 	"HarrisonWAffel/guess-ask-reddit/domain"
 	"encoding/json"
@@ -16,7 +15,7 @@ type AuthResponse struct {
 	domain.AuthTokens
 }
 
-func Register(ctx *config.AppCtx, resp *controller.APIResp, r *http.Request) {
+func Register(ctx *controller.AppCtx, resp *controller.APIResp, r *http.Request) {
 	var payload domain.User
 
 	err := json.NewDecoder(r.Body).Decode(&payload)
@@ -62,7 +61,7 @@ func Register(ctx *config.AppCtx, resp *controller.APIResp, r *http.Request) {
 	}
 }
 
-func Login(ctx *config.AppCtx, resp *controller.APIResp, r *http.Request) {
+func Login(ctx *controller.AppCtx, resp *controller.APIResp, r *http.Request) {
 	var payload domain.User
 	err := json.NewDecoder(r.Body).Decode(&payload)
 	if err != nil {
@@ -98,7 +97,7 @@ func Login(ctx *config.AppCtx, resp *controller.APIResp, r *http.Request) {
 	}
 }
 
-func LogOut(ctx *config.AppCtx, resp *controller.APIResp, r *http.Request) {
+func LogOut(ctx *controller.AppCtx, resp *controller.APIResp, r *http.Request) {
 	var payload domain.User
 	err := json.NewDecoder(r.Body).Decode(&payload)
 	if err != nil {
@@ -114,6 +113,6 @@ func LogOut(ctx *config.AppCtx, resp *controller.APIResp, r *http.Request) {
 	}
 }
 
-func RefreshToken(ctx *config.AppCtx, resp *controller.APIResp, r *http.Request) {
+func RefreshToken(ctx *controller.AppCtx, resp *controller.APIResp, r *http.Request) {
 
 }

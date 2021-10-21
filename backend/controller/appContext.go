@@ -1,4 +1,4 @@
-package config
+package controller
 
 import (
 	"HarrisonWAffel/guess-ask-reddit/domain"
@@ -11,7 +11,7 @@ type AppCtx struct {
 	AuthService auth.Service
 	UserService user.Service
 	LeaderboardService leaderboards.Service
-	ReqCtx ReqCtx
+	ReqCtx             ReqCtx
 }
 type ReqCtx struct {
 	Tokens domain.AuthTokens

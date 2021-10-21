@@ -42,7 +42,7 @@ func main() {
 
 	port := "1337"
 	m := mux.NewRouter()
-	ctx := config.AppCtx{
+	ctx := controller.AppCtx{
 		AuthService:        authService.NewAuthService(gormDb),
 		UserService:        userService.NewUserService(gormDb),
 		LeaderboardService: leaderboardService.NewLeaderboardService(gormDb),

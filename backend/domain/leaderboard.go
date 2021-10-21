@@ -58,13 +58,17 @@ type LeaderboardResponse struct {
 	Posts datatypes.JSON `json:"posts"`
 }
 
-func (lr LeaderboardResponse) FromDomainModel(l Leaderboard)  LeaderboardResponse{
+func (lr LeaderboardResponse) FromDomainModel(l Leaderboard, username string )  LeaderboardResponse{
+	if username == "" {
+		username = "?"
+	}
 	lr.ID = l.ID
 	lr.Time = l.Time
 	lr.Mode = l.Mode
 	lr.NumberOfQuestions = l.NumberOfQuestions
 	lr.Score = l.Score
 	lr.Posts = l.Posts
+	lr.Username = username
 	return lr
 }
 

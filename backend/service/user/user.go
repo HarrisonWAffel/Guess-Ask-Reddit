@@ -6,9 +6,12 @@ import (
 	"gorm.io/gorm"
 )
 
+type IDToUserMap = map[string]domain.User
+
 type Service interface {
 	GetAllUsers() ([]domain.User, error)
 	GetUser(id uuid.UUID) (domain.User, error)
+	GetUsers(ids []string) (IDToUserMap, error)
 	GetUserByUsername(username string) (domain.User, error)
 	SaveUser(user domain.User) error
 	UpdateUser(user domain.User) (domain.User, error)
@@ -30,6 +33,24 @@ func (s *service) GetAllUsers() ([]domain.User, error) {
 	result := s.repo.Find(&u)
 	return u, result.Error
 }
+
+func (s *service) GetUsers(ids []string) (IDToUserMap, error) {
+	users := []domain.User{}
+	result := s.repo.Raw("select * from users where id in (?)", ids).Scan(&users) // probably wont work
+	m := make(map[string]domain.User)
+
+	// n^2 :/
+	for _, userId := range ids {
+		for _, user := range users {
+			if userId == user.ID.String() {
+				m[userId] = user
+			}
+		}
+	}
+
+	return m, result.Error
+}
+
 
 func (s *service) GetUser(id uuid.UUID) (domain.User, error) {
 	u := domain.User{}

@@ -1,7 +1,6 @@
 package controller
 
 import (
-	"HarrisonWAffel/guess-ask-reddit/config"
 	"encoding/json"
 	"fmt"
 	"github.com/pkg/errors"
@@ -9,8 +8,8 @@ import (
 )
 
 type Handler struct {
-	AppCtx config.AppCtx
-	H      func(ctx *config.AppCtx, w *APIResp, r *http.Request)
+	AppCtx AppCtx
+	H      func(ctx *AppCtx, w *APIResp, r *http.Request)
 }
 
 func (h *Handler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
@@ -26,8 +25,8 @@ func (h *Handler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	response.Write()
 }
 
-func Authenticate(ctx *config.AppCtx, r *http.Request) (bool, *config.AppCtx) {
-	reqCtx := &config.AppCtx{
+func Authenticate(ctx *AppCtx, r *http.Request) (bool, *AppCtx) {
+	reqCtx := &AppCtx{
 		AuthService: ctx.AuthService,
 		UserService: ctx.UserService,
 		LeaderboardService: ctx.LeaderboardService,

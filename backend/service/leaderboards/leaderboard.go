@@ -57,16 +57,23 @@ func (s *service) GetGameModeLeaderBoard(mode string, userService userService.Se
 		return nil, result.Error
 	}
 
+	var userIds []string
+	for _, l := range lb {
+		userIds = append(userIds, l.Userid.String())
+	}
+
+	// get all user id's in one go
+	usersById, err := userService.GetUsers(userIds)
+	if err != nil {
+		return nil, err
+	}
+
 	var lbResponse []domain.LeaderboardResponse
-	for i := 0; i < len(lb); i++ { // could be improved
-		userId := lb[i].Userid
-		user, _ := userService.GetUser(userId)
-		lbr := domain.LeaderboardResponse{}.FromDomainModel(lb[i])
-		lbr.Username = user.Username
-		if lbr.Username == "" {
-			lbr.Username = "?"
-		}
-		lbResponse = append(lbResponse, lbr)
+	for i := 0; i < len(lb); i++ {
+		lbResponse = append(
+			lbResponse,
+			domain.LeaderboardResponse{}.FromDomainModel(lb[i], usersById[lb[i].Userid.String()].Username),
+		)
 	}
 
 	return lbResponse, result.Error

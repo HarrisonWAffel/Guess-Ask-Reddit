@@ -1,14 +1,13 @@
 package leaderboards
 
 import (
-	"HarrisonWAffel/guess-ask-reddit/config"
 	"HarrisonWAffel/guess-ask-reddit/controller"
 	"HarrisonWAffel/guess-ask-reddit/domain"
 	"encoding/json"
 	"net/http"
 )
 
-func AddGameResultToLeaderBoard(ctx *config.AppCtx, resp *controller.APIResp, r *http.Request) {
+func AddGameResultToLeaderBoard(ctx *controller.AppCtx, resp *controller.APIResp, r *http.Request) {
 	var payload domain.GameResult
 	err := json.NewDecoder(r.Body).Decode(&payload)
 	if err != nil {
@@ -30,7 +29,7 @@ func AddGameResultToLeaderBoard(ctx *config.AppCtx, resp *controller.APIResp, r 
 	}
 }
 
-func GetLeaderBoard(ctx *config.AppCtx, resp *controller.APIResp, r *http.Request) {
+func GetLeaderBoard(ctx *controller.AppCtx, resp *controller.APIResp, r *http.Request) {
 	mode := r.Header.Get("mode")
 	if mode == "" {
 		resp.SetStatus(http.StatusBadRequest)
