@@ -9,6 +9,7 @@ require (
 	github.com/gorilla/mux v1.7.4
 	github.com/pkg/errors v0.9.1
 	github.com/spf13/viper v1.9.0
+	gorm.io/datatypes v1.0.2
 	gorm.io/driver/postgres v1.1.1
 	gorm.io/gorm v1.21.15
 )

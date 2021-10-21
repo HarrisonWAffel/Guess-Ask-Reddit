@@ -9,6 +9,7 @@ import {
 } from "semantic-ui-react";
 
 import GameView from "../components/GameView";
+import LeaderboardView from "../components/LeaderboardView";
 
 const HomePage: FC<UserStateI> = ({setUserState, userState}) => {
 
@@ -63,6 +64,7 @@ const HomePage: FC<UserStateI> = ({setUserState, userState}) => {
             <Container>
                 <Segment>
                     <Header as={"h1"}>Leaderboards</Header>
+                    <LeaderboardView userState={userState} setUserState={setUserState}/>
                 </Segment>
             </Container>
         </div>

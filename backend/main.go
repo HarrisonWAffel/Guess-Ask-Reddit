@@ -3,10 +3,12 @@ package main
 import (
 	"HarrisonWAffel/guess-ask-reddit/config"
 	"HarrisonWAffel/guess-ask-reddit/controller"
-	"HarrisonWAffel/guess-ask-reddit/controller/auth"
+	authController "HarrisonWAffel/guess-ask-reddit/controller/auth"
+	leaderboardsController "HarrisonWAffel/guess-ask-reddit/controller/leaderboards"
 	"HarrisonWAffel/guess-ask-reddit/db"
-	auth2 "HarrisonWAffel/guess-ask-reddit/service/auth"
-	"HarrisonWAffel/guess-ask-reddit/service/user"
+	authService "HarrisonWAffel/guess-ask-reddit/service/auth"
+	leaderboardService "HarrisonWAffel/guess-ask-reddit/service/leaderboards"
+	userService "HarrisonWAffel/guess-ask-reddit/service/user"
 	"fmt"
 	"github.com/gorilla/handlers"
 	"github.com/gorilla/mux"
@@ -15,12 +17,17 @@ import (
 	"gorm.io/gorm"
 	"log"
 	"net/http"
+	"time"
 )
 
 func main() {
 	err := config.Read()
 	if err != nil {
 		panic(errors.Wrap(err, "could not read configuration file"))
+	}
+
+	if config.GetString("deploy.mode") == "docker" {
+		time.Sleep(15 * time.Second) // give some time for the DB to start-up
 	}
 
 	err = db.AutoMigrate()
@@ -34,49 +41,47 @@ func main() {
 	}
 
 	port := "1337"
-	mux := mux.NewRouter()
+	m := mux.NewRouter()
 	ctx := config.AppCtx{
-		AuthService: auth2.NewAuthService(gormDb),
-		UserService: user.NewUserService(gormDb),
+		AuthService:        authService.NewAuthService(gormDb),
+		UserService:        userService.NewUserService(gormDb),
+		LeaderboardService: leaderboardService.NewLeaderboardService(gormDb),
 	}
 
-	mux.Handle("/test", &controller.Handler{
+	m.Handle("/register", &controller.Handler{
 		AppCtx: ctx,
-		H: func(ctx *config.AppCtx, resp *controller.APIResp, r *http.Request) {
-			all, err := ctx.UserService.GetAllUsers()
-			if err != nil {
-				resp.SetError(err, "could not get all users")
-				return
-			}
-
-			resp.Body = all
-		},
-	})
-
-	mux.Handle("/register", &controller.Handler{
-		AppCtx: ctx,
-		H:      auth.Register,
+		H:      authController.Register,
 	}).Methods("POST")
 
-	mux.Handle("/login", &controller.Handler{
+	m.Handle("/login", &controller.Handler{
 		AppCtx: ctx,
-		H:      auth.Login,
+		H:      authController.Login,
 	}).Methods("POST")
 
-	mux.Handle("/logout", &controller.Handler{
+	m.Handle("/logout", &controller.Handler{
 		AppCtx: ctx,
-		H:      auth.LogOut,
+		H:      authController.LogOut,
 	}).Methods("POST")
 
-	mux.Handle("/refresh", &controller.Handler{
+	m.Handle("/refresh", &controller.Handler{
 		AppCtx: ctx,
-		H:      auth.RefreshToken,
+		H:      authController.RefreshToken,
 	}).Methods("POST")
 
-	headers := handlers.AllowedHeaders([]string{"X-Requested-With", "Content-Type", "Authorization"}) //only allowed headers
+	m.Handle("/submit", &controller.Handler{
+		AppCtx: ctx,
+		H:      leaderboardsController.AddGameResultToLeaderBoard,
+	}).Methods("POST")
+
+	m.Handle("/viewLeaderBoards", &controller.Handler{
+		AppCtx: ctx,
+		H:      leaderboardsController.GetLeaderBoard,
+	}).Methods("GET")
+
+	headers := handlers.AllowedHeaders([]string{"X-Requested-With", "Content-Type", "Authorization", "authToken", "gameMode", "mode"}) //only allowed headers
 	methods := handlers.AllowedMethods([]string{"GET", "POST"})                                       //only allowed requests
 	origins := handlers.AllowedOrigins([]string{"*"})                                                 //any possible domain origin
 
 	fmt.Println("Listening on port ", port)
-	log.Fatalln(http.ListenAndServe(":"+port, handlers.CORS(headers, methods, origins)(mux)))
+	log.Fatalln(http.ListenAndServe(":"+port, handlers.CORS(headers, methods, origins)(m)))
 }

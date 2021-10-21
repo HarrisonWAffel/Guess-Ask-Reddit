@@ -3,6 +3,7 @@ package db
 import (
 	"HarrisonWAffel/guess-ask-reddit/config"
 	"database/sql"
+	"fmt"
 	"github.com/golang-migrate/migrate/v4"
 	"github.com/golang-migrate/migrate/v4/database/postgres"
 	_ "github.com/golang-migrate/migrate/v4/database/postgres"
@@ -47,7 +48,11 @@ func AutoMigrate() error {
 		if err.Error() != "no change" {
 			return err
 		}
+		fmt.Println("Database Migration attempted - no changes required")
+		return nil
 	}
+
+	fmt.Println("Database successfully migrated")
 
 	return nil
 }

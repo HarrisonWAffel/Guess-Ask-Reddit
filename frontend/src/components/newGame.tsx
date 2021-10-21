@@ -1,4 +1,4 @@
-import {Divider, Form, FormSelect, Grid, GridColumn, GridRow, Header, Segment} from "semantic-ui-react";
+import {Divider, Form, FormSelect, Grid, GridColumn, Header, Segment} from "semantic-ui-react";
 import React, {FC, useState} from "react";
 import {UserState, UserStateI} from "../App";
 import {RedditPost, SurvivalOptions} from "./Game";
@@ -24,7 +24,7 @@ const NewGame:FC<UserStateI> = (props: UserStateI) => {
             <Divider/>
             <Grid>
                 <GridColumn width={8} textAlign={"center"} >
-                <Form.Group  grouped inline={true} widths={"equal"}>
+                <Form.Group  grouped widths={"equal"}>
                 <Header as={"h3"} textAlign={"center"}>Post Type</Header>
                     <Form.Field
                         label='Most Popular All Time'
@@ -110,7 +110,7 @@ const NewGame:FC<UserStateI> = (props: UserStateI) => {
                     lastPostIndex: 0,
                     remainingLives: 5
                 }
-                postNum = 5;
+                postNum = 10;
             }
 
             let posts: RedditPost[] = await GetTopPostsFromSubreddit({
@@ -130,6 +130,7 @@ const NewGame:FC<UserStateI> = (props: UserStateI) => {
                     currentPostIndex: 0,
                     numberCorrect: 0,
                     survivalOptions: survivalMode,
+                    isSurvival: survivalMode !== null,
                 },
                 email: props.userState.email,
                 refreshToken: props.userState.refreshToken,

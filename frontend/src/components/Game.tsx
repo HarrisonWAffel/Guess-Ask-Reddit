@@ -1,9 +1,9 @@
-import React, {FC, ReactElement, useEffect, useState} from "react";
-import {Button, Divider, Header, Segment} from "semantic-ui-react";
+import React, {FC, useEffect, useState} from "react";
+import {Button, Header, Segment} from "semantic-ui-react";
 
 import GameOption from "./GameOption";
 import GameQuestion from "./GameQuestion";
-import {UserState, UserStateI} from "../App";
+import {UserStateI} from "../App";
 import {DecrementSurvivalLives, GetTopPostsFromSubreddit, IncrementScore, TopPostEnum} from "../utils";
 
 export interface SurvivalOptions {
@@ -17,6 +17,7 @@ export interface GameI {
     currentPostIndex: number
     Posts: RedditPost[]
     survivalOptions: SurvivalOptions | null
+    isSurvival: boolean
 }
 
 export interface Comment {
@@ -57,6 +58,7 @@ const Game: FC<UserStateI> = (state: UserStateI) => {
                 currentPostIndex: state.userState.currentGame!.currentPostIndex + 1,
                 numberCorrect: state.userState.currentGame!.numberCorrect,
                 survivalOptions: state.userState.currentGame!.survivalOptions,
+                isSurvival: state.userState.currentGame!.isSurvival,
             },
             email: state.userState.email,
             refreshToken: state.userState.refreshToken,
@@ -89,6 +91,7 @@ const Game: FC<UserStateI> = (state: UserStateI) => {
                     lastPostIndex: newPostIndex,
                     remainingLives: state.userState.currentGame!.survivalOptions!.remainingLives,
                 },
+                isSurvival: state.userState.currentGame!.isSurvival,
             },
             email: state.userState.email,
             refreshToken: state.userState.refreshToken,
@@ -101,17 +104,18 @@ const Game: FC<UserStateI> = (state: UserStateI) => {
 
     function endgame() {
 
-
         // report game result to
         // the backend for leaderboards
-
-
-        
-
-
-
-
-
+        fetch("http://localhost:1337/submit", {
+            method: "POST",
+            body: JSON.stringify(state.userState.currentGame!),
+            headers: {
+                "authToken": state.userState.authToken,
+                "gameMode": state.userState.currentGame!.survivalOptions !== null ? "survival" : "limited"
+            }
+        }).catch(err => {
+            alert(err);
+        })
 
         state.setUserState({
             authToken: state.userState.authToken,
@@ -120,8 +124,9 @@ const Game: FC<UserStateI> = (state: UserStateI) => {
             refreshToken: state.userState.refreshToken,
             username: state.userState.username
         });
-        setShowKarma(false);
-        setGuessed(false);
+
+        localStorage.removeItem("guessed")
+        localStorage.removeItem("showKarma")
     }
 
     return <Segment style={{height: "fit-content"}} loading={isLoading}>

@@ -75,6 +75,17 @@ async function getCommentsForPost(p: RedditPost) {
     return comments;
 }
 
+export function GetLeaderboard(mode: string, authToken: string) {
+    return fetch("http://localhost:1337/viewLeaderBoards", {
+        method: "GET",
+        headers: {
+            "authToken": authToken,
+            "mode": mode,
+        }
+    })
+}
+
+// not currently used
 export function TimeRangedRedditPostsFromSubreddit(subreddit: string, createdAfter: string, createdBefore: string) {
     let sort = "sort=desc"
     let sortType = "sort_type=created_utc"
@@ -139,7 +150,8 @@ export function DecrementSurvivalLives(state: UserStateI) {
             survivalOptions: {
                 lastPostIndex:  state.userState.currentGame!.survivalOptions!.lastPostIndex,
                 remainingLives: state.userState.currentGame!.survivalOptions!.remainingLives - 1,
-            }
+            },
+            isSurvival: state.userState.currentGame!.isSurvival,
         },
         email: state.userState.email,
         refreshToken: state.userState.refreshToken,
@@ -155,7 +167,8 @@ export function IncrementScore(state: UserStateI) {
             Posts: state.userState.currentGame!.Posts,
             currentPostIndex: state.userState.currentGame!.currentPostIndex,
             numberCorrect: state.userState.currentGame!.numberCorrect + 1,
-            survivalOptions: state.userState.currentGame!.survivalOptions
+            survivalOptions: state.userState.currentGame!.survivalOptions,
+            isSurvival: state.userState.currentGame!.isSurvival,
         },
         email: state.userState.email,
         refreshToken: state.userState.refreshToken,

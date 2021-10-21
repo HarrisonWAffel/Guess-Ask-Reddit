@@ -30,14 +30,13 @@ func Authenticate(ctx *config.AppCtx, r *http.Request) (bool, *config.AppCtx) {
 	reqCtx := &config.AppCtx{
 		AuthService: ctx.AuthService,
 		UserService: ctx.UserService,
+		LeaderboardService: ctx.LeaderboardService,
 	}
 
 	switch r.RequestURI {
 	case "/register":
 		return true, reqCtx //no auth needed to register
 	case "/login":
-		return true, reqCtx //no auth needed to login
-	case "/test":
 		return true, reqCtx //no auth needed to login
 	default:
 		givenAuthToken := r.Header.Get("authToken")

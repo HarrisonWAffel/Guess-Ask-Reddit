@@ -18,3 +18,14 @@ CREATE TABLE auth_tokens (
     FOREIGN KEY (userID) REFERENCES users(id)
 );
 
+CREATE TABLE leaderboards (
+    id uuid DEFAULT uuid_generate_v4(),
+    time timestamp NOT NULL,
+    userid uuid NOT NULL,
+    mode VARCHAR NOT NULL,
+    number_of_questions int NOT NULL,
+    score int NOT NULL,
+    posts jsonb NOT NULL,
+    PRIMARY KEY (id),
+    FOREIGN KEY (userID) REFERENCES users(id)
+);
