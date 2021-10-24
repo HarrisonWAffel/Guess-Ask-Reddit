@@ -5,27 +5,9 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="5508bf13-60f3-475d-bb65-060b17f74a2e" name="Changes" comment="7">
-      <change afterPath="$PROJECT_DIR$/src/components/About.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../backend/.idea/dataSources.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../backend/.idea/dataSources.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../backend/controller/auth/auth.go" beforeDir="false" afterPath="$PROJECT_DIR$/../backend/controller/auth/auth.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../backend/controller/controller.go" beforeDir="false" afterPath="$PROJECT_DIR$/../backend/controller/controller.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../backend/db/migrations/0000_schema.up.sql" beforeDir="false" afterPath="$PROJECT_DIR$/../backend/db/migrations/0000_schema.up.sql" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../backend/domain/auth.go" beforeDir="false" afterPath="$PROJECT_DIR$/../backend/domain/auth.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../backend/domain/user.go" beforeDir="false" afterPath="$PROJECT_DIR$/../backend/domain/user.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../backend/service/auth/auth.go" beforeDir="false" afterPath="$PROJECT_DIR$/../backend/service/auth/auth.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../backend/service/user/user.go" beforeDir="false" afterPath="$PROJECT_DIR$/../backend/service/user/user.go" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../docker-compose.yml" beforeDir="false" afterPath="$PROJECT_DIR$/../docker-compose.yml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/App.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/App.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/Game.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/Game.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/GameView.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/GameView.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/LeaderboardView.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/LeaderboardView.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/Login.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/Login.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/Register.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/Register.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/newGame.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/newGame.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/pages/homePage.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/pages/homePage.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/pages/startpage.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/pages/startpage.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/utils.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/utils.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/GameOption.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/GameOption.tsx" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -114,7 +96,7 @@
       <workItem from="1634664334085" duration="30374000" />
       <workItem from="1634932606886" duration="4008000" />
       <workItem from="1634942150405" duration="2676000" />
-      <workItem from="1635019782178" duration="4543000" />
+      <workItem from="1635019782178" duration="4977000" />
     </task>
     <servers />
   </component>

@@ -1,18 +1,18 @@
 services:
-  # web:
-  #   build: ./frontend
-  #   ports:
-  #     - "8080:3000"
-  #   volumes:
-  #     - .:/code
-  #     - logvolume01:/var/log
-  #   links:
-  #     - backend
-  #
-  # backend:
-  #   build: ./backend
-  #   ports:
-  #     - "1337:1337"
+  web:
+    build: ./frontend
+    ports:
+      - "8080:3000"
+    volumes:
+      - .:/code
+      - logvolume01:/var/log
+    links:
+      - backend
+
+  backend:
+    build: ./backend
+    ports:
+      - "1337:1337"
 
   db:
     image: postgres

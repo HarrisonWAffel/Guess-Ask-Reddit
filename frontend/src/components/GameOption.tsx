@@ -20,7 +20,7 @@ interface GameOptionI {
 
 const GameOption: FC<GameOptionI> = (x: GameOptionI) => {
     let pickme = <div></div>
-    if (x.comment.isCorrectAnswer) {
+    if (x.comment.isCorrectAnswer && false) {
         pickme = <div><p>PICK ME!</p></div>
     }
 
