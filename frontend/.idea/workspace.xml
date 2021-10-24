@@ -5,9 +5,7 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="5508bf13-60f3-475d-bb65-060b17f74a2e" name="Changes" comment="7">
-      <change beforePath="$PROJECT_DIR$/../docker-compose.yml" beforeDir="false" afterPath="$PROJECT_DIR$/../docker-compose.yml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/GameOption.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/GameOption.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../backend/service/user/user.go" beforeDir="false" afterPath="$PROJECT_DIR$/../backend/service/user/user.go" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -96,7 +94,7 @@
       <workItem from="1634664334085" duration="30374000" />
       <workItem from="1634932606886" duration="4008000" />
       <workItem from="1634942150405" duration="2676000" />
-      <workItem from="1635019782178" duration="4977000" />
+      <workItem from="1635019782178" duration="5403000" />
     </task>
     <servers />
   </component>

@@ -63,7 +63,7 @@ func (s *service) GetUser(id uuid.UUID) (domain.User, error) {
 
 func (s *service) GetUserByUsername(username string) (domain.User, error) {
 	u := domain.User{}
-	result := s.repo.First(&u, "username = ?", username)
+	result := s.repo.Find(&u, "username = ?", username)
 	if result.Error != nil {
 		return domain.User{}, result.Error
 	}
