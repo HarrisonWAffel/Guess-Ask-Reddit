@@ -6,13 +6,14 @@ import HomePage from "./pages/homePage";
 import "./index.css"
 
 import {GameI} from "./components/Game";
-import {Header} from "semantic-ui-react";
+import {RefreshToken} from "./utils";
 
 export interface UserState {
     username: string
     email: string
     authToken: string
     refreshToken: string
+    expiry: string
     currentGame: GameI | null
 }
 
@@ -26,6 +27,7 @@ const initialUserState: UserState = {
     email: "",
     authToken:"",
     refreshToken:"",
+    expiry: "",
     currentGame: null,
 }
 
@@ -39,6 +41,12 @@ function App() {
     useEffect(() => {
         localStorage.setItem("userState", JSON.stringify(userState))
     })
+
+    useEffect(() => {
+        if ((new Date(userState.expiry)) < new Date()) {
+            RefreshToken(setUserState)
+        }
+    }, [userState])
 
     if (userState.authToken === "") {
         return <div>

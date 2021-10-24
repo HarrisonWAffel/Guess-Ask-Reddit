@@ -2,7 +2,7 @@ import React, {FC, useState} from "react";
 import {UserState, UserStateI} from "../App";
 import RegistrationPage from "../components/Register";
 import LoginPage from "../components/Login";
-import {Grid, Header} from "semantic-ui-react";
+import {Grid} from "semantic-ui-react";
 
 export type StartPageI = {
     userState: UserState

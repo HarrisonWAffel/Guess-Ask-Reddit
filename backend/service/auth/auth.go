@@ -33,33 +33,38 @@ func (s *service) CreateNewToken(user domain.User) domain.AuthTokens {
 		Userid:       user.ID,
 		Token:        uuid.New().String(),
 		RefreshToken: uuid.New().String(),
-		Expiry:       time.Now().Add(time.Minute*30),
+		Expiry:       time.Now().Add(time.Minute*1).UTC(),
 	}
 }
 
 func (s *service) SaveAuthToken(token domain.AuthTokens) error {
 	return s.repo.Create(&token).Error
 }
+
 func (s *service) GetAuthToken(id uuid.UUID) (domain.AuthTokens, error) {
 	token := domain.AuthTokens{}
 	result := s.repo.First(&token, "id = ?", id.String())
 	return token, result.Error
 }
+
 func (s *service) GetAuthTokenByUserId(userId uuid.UUID) (domain.AuthTokens, error) {
 	token := domain.AuthTokens{}
-	result := s.repo.First(&token, "userID = ?", userId.String())
+	result := s.repo.First(&token, "userid = ?", userId.String())
 	return token, result.Error
 }
+
 func (s *service) GetAuthTokenByToken(token string) (domain.AuthTokens, error) {
 	t := domain.AuthTokens{}
-	result := s.repo.First(&t, "token = ?", token)
+	result := s.repo.Find(&t, "token = ?", token)
 	return t, result.Error
 }
+
 func (s *service) DeleteAuthToken(id uuid.UUID) error {
-	return s.repo.Raw("delete from authToken where id = ?", id.String()).Error
+	return s.repo.Where("id = ?", id.String()).Delete(domain.AuthTokens{}).Error
 }
+
 func (s *service) DeleteAuthTokenByUserId(userId uuid.UUID) error {
-	return s.repo.Raw("delete from authToken where userID = ?", userId.String()).Error
+	return s.repo.Where("userid = ?", userId.String()).Delete(domain.AuthTokens{}).Error
 }
 
 

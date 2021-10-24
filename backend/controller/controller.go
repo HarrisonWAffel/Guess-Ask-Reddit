@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"github.com/pkg/errors"
 	"net/http"
+	"time"
 )
 
 type Handler struct {
@@ -33,10 +34,8 @@ func Authenticate(ctx *AppCtx, r *http.Request) (bool, *AppCtx) {
 	}
 
 	switch r.RequestURI {
-	case "/register":
-		return true, reqCtx //no auth needed to register
-	case "/login":
-		return true, reqCtx //no auth needed to login
+	case "/register", "/refresh", "/login", "/viewLeaderBoards":
+		return true, reqCtx //no auth needed
 	default:
 		givenAuthToken := r.Header.Get("authToken")
 		storedAuthToken, err := ctx.AuthService.GetAuthTokenByToken(givenAuthToken)
@@ -44,9 +43,15 @@ func Authenticate(ctx *AppCtx, r *http.Request) (bool, *AppCtx) {
 			fmt.Println(errors.Wrap(err, "could not get auth token from db"))
 			return false, nil
 		}
+
 		if givenAuthToken != storedAuthToken.Token {
 			return false, nil
 		}
+
+		if storedAuthToken.Expiry.Before(time.Now().UTC()) {
+			return false, nil
+		}
+
 		reqCtx.ReqCtx.Tokens = storedAuthToken
 		return true, reqCtx
 	}

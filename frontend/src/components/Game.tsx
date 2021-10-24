@@ -4,7 +4,11 @@ import {Button, Header, Segment} from "semantic-ui-react";
 import GameOption from "./GameOption";
 import GameQuestion from "./GameQuestion";
 import {UserStateI} from "../App";
-import {DecrementSurvivalLives, GetTopPostsFromSubreddit, IncrementScore, TopPostEnum} from "../utils";
+import {
+    DecrementSurvivalLives,
+    GetTopPostsFromSubreddit,
+    IncrementScore, TopPostEnum
+} from "../utils";
 
 export interface SurvivalOptions {
     lastPostIndex: number
@@ -64,7 +68,8 @@ const Game: FC<UserStateI> = (state: UserStateI) => {
             },
             email: state.userState.email,
             refreshToken: state.userState.refreshToken,
-            username: state.userState.username
+            username: state.userState.username,
+            expiry: state.userState.expiry
         });
         setShowKarma(false);
         setGuessed(false);
@@ -98,6 +103,7 @@ const Game: FC<UserStateI> = (state: UserStateI) => {
             },
             email: state.userState.email,
             refreshToken: state.userState.refreshToken,
+            expiry: state.userState.expiry,
             username: state.userState.username
         });
         setIsLoading(false);
@@ -105,19 +111,21 @@ const Game: FC<UserStateI> = (state: UserStateI) => {
         setGuessed(false);
     }
 
-    function endgame() {
+    async function endgame() {
 
         // report game result to
         // the backend for leaderboards
-        fetch("http://localhost:1337/submit", {
+        await fetch("http://localhost:1337/submit", {
             method: "POST",
             body: JSON.stringify(state.userState.currentGame!),
             headers: {
                 "authToken": state.userState.authToken,
                 "gameMode": state.userState.currentGame!.survivalOptions !== null ? "survival" : "limited"
             }
-        }).catch(err => {
-            alert(err);
+        }).then(r => {
+            if (!r.ok) {
+                throw new Error("invalid token");
+            }
         })
 
         state.setUserState({
@@ -125,7 +133,8 @@ const Game: FC<UserStateI> = (state: UserStateI) => {
             currentGame: null,
             email: state.userState.email,
             refreshToken: state.userState.refreshToken,
-            username: state.userState.username
+            username: state.userState.username,
+            expiry: state.userState.expiry
         });
 
         localStorage.removeItem("guessed")
@@ -148,12 +157,15 @@ const Game: FC<UserStateI> = (state: UserStateI) => {
                     comment={obj}
                     showCommentKarma={showKarma}
                     onClick={()=>{
-                        //todo; needs to persist across refreshes
                         if (guessed) return; // can't guess twice on one question
                         setShowKarma(true);
                         if (state.userState.currentGame!.survivalOptions === null) {
                             if (obj.isCorrectAnswer) {
                                 state.setUserState(IncrementScore(state));
+                            }
+
+                            if (state.userState.currentGame!.currentPostIndex === state.userState.currentGame!.Posts.length -1 ) {
+                                setNextButtonText("Game Over - No More Questions");
                             }
                         } else {
                             if (!obj.isCorrectAnswer) {

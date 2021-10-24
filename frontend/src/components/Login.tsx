@@ -1,6 +1,7 @@
 import React, {FC, useState} from "react";
 import {Button, Divider, Form, Header, Icon, Input, Message, Segment} from "semantic-ui-react";
 import {StartPageI} from "../pages/startpage";
+import About from "./About";
 
 export interface LoginState {
     username: string
@@ -58,6 +59,7 @@ const LoginPage: FC<StartPageI> = ({userState, setUserState, showRegistration, s
                 email: data.body.email,
                 authToken: data.body.auth_token,
                 refreshToken: data.body.refresh_token,
+                expiry: data.body.expiry,
                 currentGame: null
             });
         }).catch(err => {
@@ -87,6 +89,7 @@ const LoginPage: FC<StartPageI> = ({userState, setUserState, showRegistration, s
 
     return (
         <div>
+        <About/>
         <Segment className={"container"}>
             <Header as={"h1"}>Guess Ask Reddit</Header>
             <Divider/>

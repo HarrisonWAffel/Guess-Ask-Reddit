@@ -7,17 +7,19 @@ import (
 	"fmt"
 	"github.com/google/uuid"
 	"github.com/pkg/errors"
+	_ "github.com/pkg/errors"
+	"golang.org/x/crypto/bcrypt"
+	_ "golang.org/x/crypto/bcrypt"
 	"net/http"
 )
 
-type AuthResponse struct {
+type Response struct {
 	domain.User
 	domain.AuthTokens
 }
 
 func Register(ctx *controller.AppCtx, resp *controller.APIResp, r *http.Request) {
-	var payload domain.User
-
+	var payload domain.UserRequest
 	err := json.NewDecoder(r.Body).Decode(&payload)
 	if err != nil {
 		resp.SetStatus(http.StatusBadRequest)
@@ -25,44 +27,50 @@ func Register(ctx *controller.AppCtx, resp *controller.APIResp, r *http.Request)
 		return
 	}
 
-	// register will create a user
-	// and an auth token. once a user
-	// registers successfully they will
-	// immediately be logged in, so the
-	// registration response body will contain
-	// the required tokens
-
-	if !payload.Valid() {
+	if payload.Username == "" || payload.Password == "" {
 		resp.SetStatus(http.StatusBadRequest)
 		resp.SetError(err, "bad request body")
 		return
 	}
 
-	payload.ID = uuid.New()
-	err = ctx.UserService.SaveUser(payload)
+	hashedPass, err := bcrypt.GenerateFromPassword([]byte(payload.Password), 10)
+	if err != nil {
+		resp.SetStatus(http.StatusInternalServerError)
+		resp.SetError(err, "could not hash password")
+		return
+	}
+
+	u := domain.User{
+		ID:       uuid.New(),
+		Username: payload.Username,
+		Email:    payload.Email,
+		Password: hashedPass,
+	}
+
+	err = ctx.UserService.SaveUser(u)
 	if err != nil {
 		resp.SetStatus(http.StatusInternalServerError)
 		resp.SetError(err, "could not save user to database")
 		return
 	}
 
-	token := ctx.AuthService.CreateNewToken(payload)
+	token := ctx.AuthService.CreateNewToken(u)
 	err = ctx.AuthService.SaveAuthToken(token)
 	if err != nil {
 		resp.SetError(err, "could not generate authentication token")
-		_ = ctx.UserService.DeleteUser(payload)
+		_ = ctx.UserService.DeleteUser(u)
 		resp.SetStatus(http.StatusInternalServerError)
 		return
 	}
 
-	resp.Body = AuthResponse{
-		User:       payload,
+	resp.Body = Response{
+		User:       u,
 		AuthTokens: token,
 	}
 }
 
 func Login(ctx *controller.AppCtx, resp *controller.APIResp, r *http.Request) {
-	var payload domain.User
+	var payload domain.UserRequest
 	err := json.NewDecoder(r.Body).Decode(&payload)
 	if err != nil {
 		resp.SetError(err, "bad request body").Write()
@@ -76,10 +84,15 @@ func Login(ctx *controller.AppCtx, resp *controller.APIResp, r *http.Request) {
 		return
 	}
 
-	//todo; password hashing.
-	if payload.Password != user.Password {
+	if err := bcrypt.CompareHashAndPassword(user.Password, []byte(payload.Password)); err != nil {
 		resp.SetStatus(http.StatusUnauthorized)
 		resp.Err = errors.New("invalid password").Error()
+		return
+	}
+
+	err = ctx.AuthService.DeleteAuthTokenByUserId(user.ID)
+	if err != nil {
+		resp.SetStatus(http.StatusInternalServerError)
 		return
 	}
 
@@ -91,14 +104,14 @@ func Login(ctx *controller.AppCtx, resp *controller.APIResp, r *http.Request) {
 		return
 	}
 
-	resp.Body = AuthResponse{
-		User:       payload,
+	resp.Body = Response{
+		User:       user,
 		AuthTokens: token,
 	}
 }
 
 func LogOut(ctx *controller.AppCtx, resp *controller.APIResp, r *http.Request) {
-	var payload domain.User
+	var payload domain.UserRequest
 	err := json.NewDecoder(r.Body).Decode(&payload)
 	if err != nil {
 		resp.SetError(err, "invalid request body")
@@ -106,7 +119,14 @@ func LogOut(ctx *controller.AppCtx, resp *controller.APIResp, r *http.Request) {
 		return
 	}
 
-	err = ctx.AuthService.DeleteAuthTokenByUserId(payload.ID)
+	user, err := ctx.UserService.GetUserByUsername(payload.Username)
+	if err != nil {
+		resp.SetError(err, "could not find user")
+		resp.SetStatus(http.StatusBadRequest)
+		return
+	}
+
+	err = ctx.AuthService.DeleteAuthTokenByUserId(user.ID)
 	if err != nil {
 		resp.SetError(err, "could not remove current auth token from database")
 		resp.SetStatus(http.StatusInternalServerError)
@@ -114,5 +134,60 @@ func LogOut(ctx *controller.AppCtx, resp *controller.APIResp, r *http.Request) {
 }
 
 func RefreshToken(ctx *controller.AppCtx, resp *controller.APIResp, r *http.Request) {
+	var payload domain.TokenRefreshRequest
+	err := json.NewDecoder(r.Body).Decode(&payload)
+	if err != nil {
+		fmt.Println(err)
+		resp.SetStatus(http.StatusBadRequest)
+		resp.SetError(err, "invalid request body")
+		return
+	}
 
+	user, err := ctx.UserService.GetUserByUsername(payload.Username)
+	if err != nil {
+		fmt.Println(err)
+		resp.SetStatus(http.StatusBadRequest)
+		resp.SetError(err, "invalid request")
+		return
+	}
+
+	storedToken, err := ctx.AuthService.GetAuthTokenByUserId(user.ID)
+	if err != nil {
+		fmt.Println(err)
+		resp.SetStatus(http.StatusInternalServerError)
+		resp.SetError(err, "unexpected auth error")
+		return
+	}
+
+	if payload.AuthToken != storedToken.Token || payload.RefreshToken != storedToken.RefreshToken {
+		fmt.Println("dont match")
+		fmt.Println(payload.AuthToken)
+		fmt.Println(storedToken.Token)
+		fmt.Println(payload.RefreshToken)
+		fmt.Println(storedToken.RefreshToken)
+		resp.SetStatus(http.StatusBadRequest)
+		return
+	}
+
+	err = ctx.AuthService.DeleteAuthToken(storedToken.ID)
+	if err != nil {
+		fmt.Println(err)
+		resp.SetStatus(http.StatusInternalServerError)
+		resp.SetError(err, "could not refresh token")
+		return
+	}
+
+	newToken := ctx.AuthService.CreateNewToken(user)
+	err = ctx.AuthService.SaveAuthToken(newToken)
+	if err != nil {
+		fmt.Println(err)
+		resp.SetStatus(http.StatusInternalServerError)
+		resp.SetError(err, "could not generate new tokens")
+		return
+	}
+
+	resp.Body = Response{
+		User:       user,
+		AuthTokens: newToken,
+	}
 }

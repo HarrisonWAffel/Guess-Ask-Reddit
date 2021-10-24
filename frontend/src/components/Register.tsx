@@ -1,5 +1,5 @@
 import React, {FC, useState} from "react";
-import {Button, Container, Form, Header, Icon, Input, Message, Segment} from "semantic-ui-react";
+import {Button, Form, Header, Icon, Input, Message, Segment} from "semantic-ui-react";
 import {StartPageI} from "../pages/startpage";
 
 
@@ -60,6 +60,7 @@ const RegistrationPage: FC<StartPageI> = ({userState, setUserState, showRegistra
                 username: data.body.username,
                 email: formState.email,
                 authToken: data.body.auth_token,
+                expiry: data.body.expiry,
                 refreshToken: data.body.refresh_token,
                 currentGame: null
             })

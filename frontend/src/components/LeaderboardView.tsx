@@ -2,7 +2,6 @@ import {FC, useEffect, useState} from "react";
 import {Segment, Table, Header, Button} from "semantic-ui-react";
 import {RedditPost} from "./Game";
 import {UserStateI} from "../App";
-import {GetLeaderboard} from "../utils";
 
 declare interface LeaderboardResponse {
     id: string;
@@ -30,48 +29,58 @@ const LeaderboardView: FC<UserStateI> = (state: UserStateI) => {
         if (normalLeaderboard.length === 0) {
             refreshLeaderBoard("normal")
         }
-    }, [])
+    }, [normalLeaderboard.length, survivalLeaderboard.length])
 
-    function refreshLeaderBoard(type: string) {
+    async function refreshLeaderBoard(type: string) {
         switch (type) {
             case "survival":
                 setSurvivalModeTableIsLoading(true);
-                GetLeaderboard("survival", state.userState.authToken).then(r => r.json())
-                    .then(r => {
-                        let body = JSON.parse(r.body);
-                        if (body == null || body.length === 0) {
-                            let noResultsItem:LeaderboardResponse = {
-                                id: "", mode: "survival", number_of_questions: 0, posts: [], score: 0, time: "", username: "No Results, be the first!"
-                            }
-                            setSurvivalLeaderBoard([noResultsItem]);
-                        } else {
-                            body.sort((a: LeaderboardResponse, b: LeaderboardResponse) => (a.score > b.score) ? -1 : 1)
-                            body = body.slice(0, 25);
-                            setSurvivalLeaderBoard(body);
+                fetch("http://localhost:1337/viewLeaderBoards", {
+                    method: "GET",
+                    headers: {
+                        "mode": "survival",
+                    }
+                }).then(r => r.json()).then(r => {
+                    let body = JSON.parse(r.body);
+                    if (body == null || body.length === 0) {
+                        let noResultsItem:LeaderboardResponse = {
+                            id: "", mode: "survival", number_of_questions: 0, posts: [], score: 0, time: "", username: "No Results, be the first!"
                         }
-                        setSurvivalModeTableIsLoading(false);
-                    }).catch(err => {
-                    setSurvivalModeTableIsLoading(false);
+                        setSurvivalLeaderBoard([noResultsItem]);
+                    } else {
+                        body.sort((a: LeaderboardResponse, b: LeaderboardResponse) => (a.score > b.score) ? -1 : 1)
+                        body = body.slice(0, 25);
+                        setSurvivalLeaderBoard(body);
+                    }
+                }).catch((err) => {
+                    console.log(err);
                 })
+                setSurvivalModeTableIsLoading(false);
                 break;
             default:
-                GetLeaderboard("limited", state.userState.authToken).then(r => r.json())
-                    .then(r => {
-                        let body = JSON.parse(r.body);
-                        if (body == null || body.length === 0) {
-                            let noResultsItem:LeaderboardResponse = {
-                                id: "", mode: "limited", number_of_questions: 0, posts: [], score: 0, time: "", username: "No Results, be the first!"
-                            }
-                            setNormalLeaderBoard([noResultsItem]);
-                        } else {
-                            body.sort((a: LeaderboardResponse, b: LeaderboardResponse) => (a.score > b.score) ? -1 : 1)
-                            body = body.slice(0, 25);
-                            setNormalLeaderBoard(body);
+                fetch("http://localhost:1337/viewLeaderBoards", {
+                    method: "GET",
+                    headers: {
+                        "mode": "limited",
+                    }
+                }).then(r => r.json())
+                .then(r => {
+                    let body = JSON.parse(r.body);
+                    if (body == null || body.length === 0) {
+                        let noResultsItem:LeaderboardResponse = {
+                            id: "", mode: "limited", number_of_questions: 0, posts: [], score: 0, time: "", username: "No Results, be the first!"
                         }
-                        setNormalModeTableIsLoading(false);
-                    }).catch(err => {
-                        setNormalModeTableIsLoading(false);
+                        setNormalLeaderBoard([noResultsItem]);
+                    } else {
+                        body.sort((a: LeaderboardResponse, b: LeaderboardResponse) => (a.score > b.score) ? -1 : 1)
+                        body = body.slice(0, 25);
+                        setNormalLeaderBoard(body);
+                    }
+                    setNormalModeTableIsLoading(false);
+                }).catch((err) => {
+                    console.log(err);
                 })
+                setNormalModeTableIsLoading(false);
         }
     }
 

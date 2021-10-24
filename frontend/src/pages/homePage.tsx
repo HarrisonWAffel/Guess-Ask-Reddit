@@ -1,34 +1,21 @@
-import React, {FC, useState} from "react";
+import React, {FC} from "react";
 import {UserStateI} from "../App";
 
 import {
-    Button, CommentText,
-    Container, Grid, GridColumn, GridRow,
-    Header,
+    Button, Container, Header,
     Segment
 } from "semantic-ui-react";
 
 import GameView from "../components/GameView";
 import LeaderboardView from "../components/LeaderboardView";
+import About from "../components/About";
 
 const HomePage: FC<UserStateI> = ({setUserState, userState}) => {
 
 
-    let about = <Segment>
-        <Container text fluid={true}>
-            <Segment>
-                <Header as={"h2"} style={{margin: "auto"}}>What is "Guess Ask Reddit"?</Header>
-                <br/>
-                <i>"Guess Ask Reddit"</i> Is a small online game that presents posts
-                from r/AskReddit and asks you to guess what comment has the highest karma.
-                <br/><br/>
-                How deeply in-sync are you with the reddit hive-mind? Play and find out!
-            </Segment>
-        </Container>
-    </Segment>
-
-    if (userState.currentGame !== null) {
-        about = <div></div>
+    let about = <div></div>
+    if (userState.currentGame === null) {
+        about = <About/>
     }
 
     return (
@@ -40,15 +27,28 @@ const HomePage: FC<UserStateI> = ({setUserState, userState}) => {
                     <div  style={{float: "right"}}>
                         <p style={{display: "inline"}}> {userState.username}  </p>
                         <Button onClick={()=>{
+                            fetch("http://localhost:1337/logout", {
+                                method: "POST",
+                                headers: {
+                                    "authToken": userState.authToken,
+                                },
+                                body: JSON.stringify({
+                                    email: userState.email,
+                                    username: userState.username,
+                                })
+                            })
+
                             localStorage.clear();
                             setUserState({
                                 username: "",
-                                email: "NOT LOGGED IN",
+                                email: "",
                                 authToken:"",
                                 refreshToken:"",
+                                expiry: "",
                                 currentGame: null
-                            })}
-                        }>log out</Button>
+                            })
+
+                        }}>log out</Button>
                     </div>
                 </Header>
             </Container>

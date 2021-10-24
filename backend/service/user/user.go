@@ -71,7 +71,12 @@ func (s *service) GetUserByUsername(username string) (domain.User, error) {
 }
 
 func (s *service) SaveUser(user domain.User) error {
-	return s.repo.Create(&user).Error
+	switch user.Email {
+	case "":
+		return s.repo.Omit("email").Create(&user).Error
+	default:
+		return s.repo.Create(&user).Error
+	}
 }
 
 func (s *service) UpdateUser(user domain.User) (domain.User, error) {

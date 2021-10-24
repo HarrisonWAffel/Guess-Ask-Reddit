@@ -17,6 +17,48 @@ export interface TopPostsFromSubreddit {
     numberOfPosts: number
     startingPostIndex: number | null
 }
+export interface NewTokens {
+    authToken: string
+    refreshToken: string
+}
+
+export async function RefreshToken(setUserState: React.Dispatch<React.SetStateAction<UserState>>): Promise<NewTokens>  {
+    return HandleExpiredToken(setUserState)
+}
+
+export async function HandleExpiredToken(setUserState: React.Dispatch<React.SetStateAction<UserState>>): Promise<NewTokens>  {
+    // refresh token
+    let us = JSON.parse(localStorage.getItem("userState")!);
+    return fetch("http://localhost:1337/refresh", {
+        method: "POST",
+        body: JSON.stringify({
+            auth_token: us.authToken,
+            refresh_token: us.refreshToken,
+            username: us.username,
+        })
+    })
+        .then(r => {
+            if (!r.ok) {
+                throw new Error("refresh token op failed")
+            }
+            return r.json()
+        })
+    .then(r => {
+        setUserState({
+            authToken: r.body.auth_token,
+            currentGame: us.currentGame,
+            email: us.email,
+            refreshToken: r.body.refresh_token,
+            username: us.username,
+            expiry: r.body.expiry
+        })
+        let x: NewTokens = {
+            authToken: r.body.auth_token,
+            refreshToken: r.body.refresh_token
+        }
+        return x
+    })
+}
 
 export function GetTopPostsFromSubreddit(options: TopPostsFromSubreddit) {
     let limit = options.numberOfPosts.toString()
@@ -75,70 +117,6 @@ async function getCommentsForPost(p: RedditPost) {
     return comments;
 }
 
-export function GetLeaderboard(mode: string, authToken: string) {
-    return fetch("http://localhost:1337/viewLeaderBoards", {
-        method: "GET",
-        headers: {
-            "authToken": authToken,
-            "mode": mode,
-        }
-    })
-}
-
-// not currently used
-export function TimeRangedRedditPostsFromSubreddit(subreddit: string, createdAfter: string, createdBefore: string) {
-    let sort = "sort=desc"
-    let sortType = "sort_type=created_utc"
-    // let createdAfter = "after=1513588521"
-    // let createdBefore = "before=1623934121"
-    let size = "size=5"
-    let url = "https://api.pushshift.io/reddit/search/submission/?subreddit="+subreddit+"&"+sort+"&"+sortType+"&"+createdAfter+"&"+createdBefore+"&"+size;
-
-    let posts: RedditPost[] = [];
-
-    return fetch(url)
-        .then(resp => resp.json())
-        .then(async data => {
-            data = data.data;
-            for (let i = 0; i < data.length; i++) {
-                if (data[i].author === "[deleted]") continue;
-
-                let response = await fetch(data[i].full_link+".json")
-                let responseData = await response.json();
-                let ops: Comment[] = [];
-                for (let i = 0; i < responseData[1].data.children.length; i++) {
-                    let comment = responseData[1].data.children[i].data;
-                    if (comment.author === "[deleted]") continue;
-                    ops[i] = {
-                        comment: comment.body,
-                        commentKarma: comment.score,
-                        username: comment.author,
-                        isCorrectAnswer: false,
-                    }
-                }
-
-                ops.sort((a,b) => (a.commentKarma > b.commentKarma ? -1 : 1))
-                ops = ops.slice(0, 3);
-                ops[0].isCorrectAnswer = true;
-                let shuffled = ops
-                    .map((value) => ({ value, sort: Math.random() }))
-                    .sort((a, b) => a.sort - b.sort)
-                    .map(({ value }) => value)
-                posts.push({
-                    ID: data[i].id ?? "",
-                    postKarma: data[i].score ?? 0,
-                    postURL: data[i].full_link ?? "",
-                    posterUsername: data[i].author ?? "",
-                    comments: shuffled,
-                    postBody: data[i].title,
-                    postTitle: data[i].title ?? ""
-                })
-            }
-
-            return posts;
-        })
-}
-
 export function DecrementSurvivalLives(state: UserStateI) {
     return {
         authToken: state.userState.authToken,
@@ -156,6 +134,7 @@ export function DecrementSurvivalLives(state: UserStateI) {
         },
         email: state.userState.email,
         refreshToken: state.userState.refreshToken,
+        expiry: state.userState.expiry,
         username: state.userState.username
     }
 }
@@ -174,6 +153,7 @@ export function IncrementScore(state: UserStateI) {
         },
         email: state.userState.email,
         refreshToken: state.userState.refreshToken,
+        expiry: state.userState.expiry,
         username: state.userState.username
     }
 }

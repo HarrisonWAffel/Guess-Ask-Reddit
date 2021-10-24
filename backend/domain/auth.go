@@ -31,3 +31,8 @@ func (a *AuthTokens) BeforeCreate(tx *gorm.DB) error {
 	return nil
 }
 
+type TokenRefreshRequest struct {
+	AuthToken string 	`json:"auth_token"`
+	RefreshToken string `json:"refresh_token"`
+	Username string 	`json:"username"`
+}

@@ -135,7 +135,8 @@ const NewGame:FC<UserStateI> = (props: UserStateI) => {
                 },
                 email: props.userState.email,
                 refreshToken: props.userState.refreshToken,
-                username: props.userState.username
+                username: props.userState.username,
+                expiry: props.userState.expiry
             }
 
             setIsLoading(false);
