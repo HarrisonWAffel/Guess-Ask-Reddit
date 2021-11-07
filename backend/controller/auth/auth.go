@@ -159,11 +159,11 @@ func RefreshToken(ctx *controller.AppCtx, resp *controller.APIResp, r *http.Requ
 	}
 
 	if payload.AuthToken != storedToken.Token || payload.RefreshToken != storedToken.RefreshToken {
-		fmt.Println("dont match")
-		fmt.Println(payload.AuthToken)
-		fmt.Println(storedToken.Token)
-		fmt.Println(payload.RefreshToken)
-		fmt.Println(storedToken.RefreshToken)
+		resp.Log.Error("Could not refresh access token, given values do not match stored values")
+		resp.Log.Error("Received AuthToken: ", payload.AuthToken)
+		resp.Log.Error("Stored AuthToken: ", storedToken.Token)
+		resp.Log.Error("Received RefreshToken: ", payload.RefreshToken)
+		resp.Log.Error("Stored RefreshToken: ", storedToken.RefreshToken)
 		resp.SetStatus(http.StatusBadRequest)
 		return
 	}

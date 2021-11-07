@@ -1,9 +1,11 @@
 package controller
 
 import (
+	"HarrisonWAffel/guess-ask-reddit/config"
 	"encoding/json"
 	"fmt"
 	"github.com/pkg/errors"
+	"github.com/sirupsen/logrus"
 	"net/http"
 	"time"
 )
@@ -14,9 +16,9 @@ type Handler struct {
 }
 
 func (h *Handler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
-	response := &APIResp{Writer: w}
+	response := &APIResp{Writer: w, Log: logrus.NewEntry(config.Log)}
 
-	isAuthenticated, reqCtx := Authenticate(&h.AppCtx, r)
+	isAuthenticated, reqCtx := Authenticate(&h.AppCtx, response, r)
 	if isAuthenticated {
 		h.H(reqCtx, response, r)
 	} else {
@@ -26,10 +28,10 @@ func (h *Handler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	response.Write()
 }
 
-func Authenticate(ctx *AppCtx, r *http.Request) (bool, *AppCtx) {
+func Authenticate(ctx *AppCtx, resp *APIResp, r *http.Request) (bool, *AppCtx) {
 	reqCtx := &AppCtx{
-		AuthService: ctx.AuthService,
-		UserService: ctx.UserService,
+		AuthService:        ctx.AuthService,
+		UserService:        ctx.UserService,
 		LeaderboardService: ctx.LeaderboardService,
 	}
 
@@ -53,21 +55,26 @@ func Authenticate(ctx *AppCtx, r *http.Request) (bool, *AppCtx) {
 		}
 
 		reqCtx.ReqCtx.Tokens = storedAuthToken
+		resp.Log = resp.Log.WithFields(logrus.Fields{
+			"userId": storedAuthToken.Userid,
+		})
+
 		return true, reqCtx
 	}
 }
 
 type APIResp struct {
-	Reason string `json:"reason,omitempty"`
-	Body interface{} `json:"body"`
-	Status int `json:"status"`
-	Err string `json:"err"`
+	Reason string              `json:"reason,omitempty"`
+	Body   interface{}         `json:"body"`
+	Status int                 `json:"status"`
+	Err    string              `json:"err"`
 	Writer http.ResponseWriter `json:"-"`
+	Log    *logrus.Entry
 }
 
-func (a *APIResp) SetError(err error, reason string) *APIResp  {
+func (a *APIResp) SetError(err error, reason string) *APIResp {
 	a.Err = errors.Wrap(err, reason).Error()
-	fmt.Println(a.Err)
+	a.Log.Error(a.Err)
 	return a
 }
 

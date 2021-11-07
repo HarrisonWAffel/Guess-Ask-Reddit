@@ -3,24 +3,33 @@ package config
 import (
 	"fmt"
 	"github.com/pkg/errors"
+	"github.com/sirupsen/logrus"
 	"github.com/spf13/viper"
+	"os"
 	"strings"
 )
 
 var (
 	v             *viper.Viper
 	propertyNames map[string]struct{}
+	Log           *logrus.Logger
 )
 
 func init() {
 	v = viper.New()
+	Log = &logrus.Logger{
+		Out:       os.Stdout,
+		Formatter: new(logrus.TextFormatter),
+		Hooks:     make(logrus.LevelHooks),
+		Level:     logrus.InfoLevel,
+	}
 }
 
 const (
-	databaseHost = "database.host"
-	databaseName = "database.name"
+	databaseHost     = "database.host"
+	databaseName     = "database.name"
 	databasePassword = "database.password"
-	LogLevel = "log.level"
+	LogLevel         = "log.level"
 )
 
 func Read() error {

@@ -124,6 +124,8 @@ const Game: FC<UserStateI> = (state: UserStateI) => {
             if (!r.ok) {
                 throw new Error("invalid token");
             }
+        }).catch(err => {
+            console.log("error encountered during leaderboard submission " + err.message)
         })
 
         state.setUserState({

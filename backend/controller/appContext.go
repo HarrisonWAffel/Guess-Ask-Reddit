@@ -8,11 +8,12 @@ import (
 )
 
 type AppCtx struct {
-	AuthService auth.Service
-	UserService user.Service
+	AuthService        auth.Service
+	UserService        user.Service
 	LeaderboardService leaderboards.Service
 	ReqCtx             ReqCtx
 }
+
 type ReqCtx struct {
 	Tokens domain.AuthTokens
 }
