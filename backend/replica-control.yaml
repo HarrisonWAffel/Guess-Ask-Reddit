@@ -1,0 +1,22 @@
+apiVersion: guessAskReddit/v1
+kind: ReplicaSet
+metadata:
+  name: backend-replica-set
+  labels:
+      app: guess-ask-reddit
+      type: backend
+spec:
+  template: # each section of the template is a pod
+    metadata:
+      name: backend
+      labels:
+        lang: go
+        tier: backend
+    spec:
+      containers:
+        - name: backend
+          image: harrisonwaffel/aseekermiddleware
+  replicas: 2
+  selector:
+    matchLabels:
+      type: backend

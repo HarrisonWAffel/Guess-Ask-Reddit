@@ -43,7 +43,6 @@ func Register(ctx *controller.AppCtx, resp *controller.APIResp, r *http.Request)
 	u := domain.User{
 		ID:       uuid.New(),
 		Username: payload.Username,
-		Email:    payload.Email,
 		Password: hashedPass,
 	}
 

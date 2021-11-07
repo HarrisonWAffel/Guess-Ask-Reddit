@@ -31,14 +31,12 @@ func testGetUsers(t *testing.T, us Service) {
 		{
 			ID:       uuid.New(),
 			Username: "TEST USER",
-			Email:    "TEST@TEST.com",
-			Password: "NAH",
+			Password: []byte("NAH"),
 		},
 		{
 			ID:       uuid.New(),
 			Username: "TEST USER2",
-			Email:    "TEST2@TEST.com",
-			Password: "NAH2",
+			Password: []byte("NAH2"),
 		},
 	}
 

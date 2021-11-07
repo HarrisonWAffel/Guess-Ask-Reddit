@@ -6,7 +6,6 @@ import (
 )
 
 type UserRequest struct {
-	Email string	`json:"email"`
 	Password string `json:"password,omitempty"`
 	Username string `json:"username"`
 }
@@ -14,7 +13,6 @@ type UserRequest struct {
 type User struct {
 	ID       uuid.UUID `json:"id" ,gorm:"primaryKey"`
 	Username string    `json:"username" ,gorm:"username"`
-	Email    string    `json:"email,omitempty" ,gorm:"default:null"`
 	Password []byte	   `json:"-"`
 }
 
