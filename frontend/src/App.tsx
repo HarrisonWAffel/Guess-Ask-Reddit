@@ -42,7 +42,6 @@ function App() {
 
     useEffect(() => {
         if (((new Date(userState.expiry)) < new Date()) && userState.expiry !== '') {
-            console.log(userState.expiry)
             RefreshToken(setUserState)
                 .catch(() => {
                     setUserState(initialUserState);
