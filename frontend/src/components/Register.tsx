@@ -104,6 +104,7 @@ const RegistrationPage: FC<StartPageI> = ({userState, setUserState, showRegistra
                     <Form.Field
                         label={"Password"}
                         id={"password"}
+                        type={"password"}
                         control={Input}
                         onChange={(e: React.ChangeEvent<HTMLInputElement>)=>{
                             setFormState({
