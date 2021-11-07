@@ -4,7 +4,6 @@ import {StartPageI} from "../pages/startpage";
 
 
 export interface registrationState {
-    email: string
     username: string
     password: string
     showWarning: boolean
@@ -14,7 +13,6 @@ export interface registrationState {
 
 const RegistrationPage: FC<StartPageI> = ({userState, setUserState, showRegistration, setShowRegistration}) => {
     const initRegistrationState: registrationState = {
-        email :"",
         username: "",
         password:"",
         showWarning: true,
@@ -27,7 +25,6 @@ const RegistrationPage: FC<StartPageI> = ({userState, setUserState, showRegistra
     function handleRegistration() {
         if (formState.password === "") {
             setFormState({
-                email: formState.email,
                 password: formState.password,
                 username: formState.username,
                 errorMessage: "Password field is empty",
@@ -41,7 +38,6 @@ const RegistrationPage: FC<StartPageI> = ({userState, setUserState, showRegistra
             method: "POST",
             body: JSON.stringify(
                 {
-                    email:    formState.email,
                     username: formState.username,
                     password: formState.password
                 })
@@ -58,7 +54,6 @@ const RegistrationPage: FC<StartPageI> = ({userState, setUserState, showRegistra
         .then(data => {
             setUserState({
                 username: data.body.username,
-                email: formState.email,
                 authToken: data.body.auth_token,
                 expiry: data.body.expiry,
                 refreshToken: data.body.refresh_token,
@@ -68,20 +63,15 @@ const RegistrationPage: FC<StartPageI> = ({userState, setUserState, showRegistra
             //todo; error text on page
             console.log(err);
 
-            let invalidEmail = err.toString().includes("users_email_key");
+
             let invalidUsername = err.toString().includes("users_username_key");
             let errorMessage = ""
-
-            if (invalidEmail) {
-                errorMessage += "Email is already in use."
-            }
 
             if (invalidUsername) {
                 errorMessage += " Username is already in use."
             }
 
             setFormState({
-                email: formState.email,
                 password: formState.password,
                 username: formState.username,
                 errorMessage: errorMessage,
@@ -97,36 +87,12 @@ const RegistrationPage: FC<StartPageI> = ({userState, setUserState, showRegistra
                 <Header as={"h2"}>Register</Header>
                 <Form warning={formState.showWarning} error={formState.showError}>
                     <Form.Field
-                        onChange={(e: React.ChangeEvent<HTMLInputElement>)=>{
-                            setFormState({
-                                email: e.target.value,
-                                username: formState.username,
-                                password: formState.password,
-                                showWarning: false,
-                                showError: formState.showError,
-                                errorMessage: ""
-                            })
-                        }}
-                        label={"Email"}
-                        control={Input}
-                        id={"email"}
-                    />
-                    <Message
-                        warning
-                        header='Email is Optional'
-                        list={[
-                            'Email is only required for password resets',
-                            'Not supplying an email means that losing your password will lock you out of your account'
-                        ]}
-                    />
-                    <Form.Field
                         label={"Username"}
                         id={"username"}
                         control={Input}
                         onChange={(e: React.ChangeEvent<HTMLInputElement>)=>{
 
                             setFormState({
-                                email: formState.email,
                                 username: e.target.value,
                                 password: formState.password,
                                 showWarning: false,
@@ -141,7 +107,6 @@ const RegistrationPage: FC<StartPageI> = ({userState, setUserState, showRegistra
                         control={Input}
                         onChange={(e: React.ChangeEvent<HTMLInputElement>)=>{
                             setFormState({
-                                email:    formState.email,
                                 username: formState.username,
                                 password: e.target.value,
                                 showWarning: false,

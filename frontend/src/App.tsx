@@ -10,7 +10,6 @@ import {RefreshToken} from "./utils";
 
 export interface UserState {
     username: string
-    email: string
     authToken: string
     refreshToken: string
     expiry: string
@@ -24,7 +23,6 @@ export type UserStateI = {
 
 const initialUserState: UserState = {
     username: "",
-    email: "",
     authToken:"",
     refreshToken:"",
     expiry: "",
@@ -43,8 +41,12 @@ function App() {
     })
 
     useEffect(() => {
-        if ((new Date(userState.expiry)) < new Date()) {
+        if (((new Date(userState.expiry)) < new Date()) && userState.expiry !== '') {
+            console.log(userState.expiry)
             RefreshToken(setUserState)
+                .catch(() => {
+                    setUserState(initialUserState);
+                })
         }
     }, [userState])
 

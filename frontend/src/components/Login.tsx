@@ -56,7 +56,6 @@ const LoginPage: FC<StartPageI> = ({userState, setUserState, showRegistration, s
         }).then(data => {
             setUserState({
                 username: data.body.username,
-                email: data.body.email,
                 authToken: data.body.auth_token,
                 refreshToken: data.body.refresh_token,
                 expiry: data.body.expiry,
@@ -133,7 +132,7 @@ const LoginPage: FC<StartPageI> = ({userState, setUserState, showRegistration, s
             </Form>
         <Message warning>
             <Icon name='help' />
-            Don't have an account?&nbsp;<a onClick={()=>{setShowRegistration(true);}}>Register here</a>&nbsp;instead. (Email optional)
+            Don't have an account?&nbsp;<a onClick={()=>{setShowRegistration(true);}}>Register here</a>&nbsp;instead.
         </Message>
         </Segment>
         </div>

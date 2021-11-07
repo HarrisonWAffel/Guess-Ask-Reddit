@@ -133,7 +133,6 @@ const NewGame:FC<UserStateI> = (props: UserStateI) => {
                     survivalOptions: survivalMode,
                     isSurvival: survivalMode !== null,
                 },
-                email: props.userState.email,
                 refreshToken: props.userState.refreshToken,
                 username: props.userState.username,
                 expiry: props.userState.expiry

@@ -66,7 +66,6 @@ const Game: FC<UserStateI> = (state: UserStateI) => {
                 survivalOptions: state.userState.currentGame!.survivalOptions,
                 isSurvival: state.userState.currentGame!.isSurvival,
             },
-            email: state.userState.email,
             refreshToken: state.userState.refreshToken,
             username: state.userState.username,
             expiry: state.userState.expiry
@@ -101,7 +100,6 @@ const Game: FC<UserStateI> = (state: UserStateI) => {
                 },
                 isSurvival: state.userState.currentGame!.isSurvival,
             },
-            email: state.userState.email,
             refreshToken: state.userState.refreshToken,
             expiry: state.userState.expiry,
             username: state.userState.username
@@ -131,7 +129,6 @@ const Game: FC<UserStateI> = (state: UserStateI) => {
         state.setUserState({
             authToken: state.userState.authToken,
             currentGame: null,
-            email: state.userState.email,
             refreshToken: state.userState.refreshToken,
             username: state.userState.username,
             expiry: state.userState.expiry

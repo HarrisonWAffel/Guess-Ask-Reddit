@@ -33,7 +33,6 @@ const HomePage: FC<UserStateI> = ({setUserState, userState}) => {
                                     "authToken": userState.authToken,
                                 },
                                 body: JSON.stringify({
-                                    email: userState.email,
                                     username: userState.username,
                                 })
                             })
@@ -41,7 +40,6 @@ const HomePage: FC<UserStateI> = ({setUserState, userState}) => {
                             localStorage.clear();
                             setUserState({
                                 username: "",
-                                email: "",
                                 authToken:"",
                                 refreshToken:"",
                                 expiry: "",

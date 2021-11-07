@@ -47,7 +47,6 @@ export async function HandleExpiredToken(setUserState: React.Dispatch<React.SetS
         setUserState({
             authToken: r.body.auth_token,
             currentGame: us.currentGame,
-            email: us.email,
             refreshToken: r.body.refresh_token,
             username: us.username,
             expiry: r.body.expiry
@@ -132,7 +131,6 @@ export function DecrementSurvivalLives(state: UserStateI) {
             },
             isSurvival: state.userState.currentGame!.isSurvival,
         },
-        email: state.userState.email,
         refreshToken: state.userState.refreshToken,
         expiry: state.userState.expiry,
         username: state.userState.username
@@ -151,7 +149,6 @@ export function IncrementScore(state: UserStateI) {
             TotalPosts: state.userState.currentGame!.TotalPosts,
             isSurvival: state.userState.currentGame!.isSurvival,
         },
-        email: state.userState.email,
         refreshToken: state.userState.refreshToken,
         expiry: state.userState.expiry,
         username: state.userState.username
