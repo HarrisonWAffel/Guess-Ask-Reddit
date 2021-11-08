@@ -26,6 +26,13 @@ export async function RefreshToken(setUserState: React.Dispatch<React.SetStateAc
     return HandleExpiredToken(setUserState)
 }
 
+export function GetBackendURL(): string {
+    if (process.env.REACT_APP_DEPLOYMODE === "k8") {
+        return "backend";
+    }
+    return "localhost:1337";
+}
+
 export async function HandleExpiredToken(setUserState: React.Dispatch<React.SetStateAction<UserState>>): Promise<NewTokens>  {
     // refresh token
     let us = JSON.parse(localStorage.getItem("userState")!);

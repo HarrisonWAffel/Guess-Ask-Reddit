@@ -1,0 +1,26 @@
+apiVersion: apps/v1
+kind: ReplicaSet
+metadata:
+  name: frontend-replica-set
+  labels:
+      app: guess-ask-reddit
+      type: frontend
+spec:
+  template: # each section of the template is a pod
+    metadata:
+      name: frontend
+      labels:
+        lang: js
+        tier: frontend
+    spec:
+      containers:
+        - name: frontend
+          image: harrisonwaffel/guess-ask-reddit-frontend
+          env:
+            - name: REACT_APP_DEPLOY_MODE
+              value: "k8"
+  replicas: 2
+  selector:
+    matchLabels:
+      lang: js
+      tier: frontend

@@ -2,11 +2,11 @@ import React, {createContext, useContext, useEffect, useState} from 'react';
 import './App.css';
 import StartPage from "./pages/startpage";
 import HomePage from "./pages/homePage";
-
+import * as dotenv from 'dotenv';
 import "./index.css"
 
 import {GameI} from "./components/Game";
-import {RefreshToken} from "./utils";
+import {GetBackendURL, RefreshToken} from "./utils";
 
 export interface UserState {
     username: string
