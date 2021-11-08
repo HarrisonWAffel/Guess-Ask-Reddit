@@ -69,7 +69,7 @@ type APIResp struct {
 	Status int                 `json:"status"`
 	Err    string              `json:"err"`
 	Writer http.ResponseWriter `json:"-"`
-	Log    *logrus.Entry
+	Log    *logrus.Entry 	   `json:"-"`
 }
 
 func (a *APIResp) SetError(err error, reason string) *APIResp {
