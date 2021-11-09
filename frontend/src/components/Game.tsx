@@ -5,9 +5,9 @@ import GameOption from "./GameOption";
 import GameQuestion from "./GameQuestion";
 import {UserStateI} from "../App";
 import {
-    DecrementSurvivalLives,
+    DecrementSurvivalLives, GetBackendURL,
     GetTopPostsFromSubreddit,
-    IncrementScore, TopPostEnum
+    IncrementScore, RefreshToken, TopPostEnum
 } from "../utils";
 
 export interface SurvivalOptions {
@@ -110,14 +110,14 @@ const Game: FC<UserStateI> = (state: UserStateI) => {
     }
 
     async function endgame() {
-
+        let newToken = await RefreshToken(state.setUserState);
         // report game result to
         // the backend for leaderboards
-        await fetch("http://localhost:1337/submit", {
+        await fetch("http://"+GetBackendURL()+"/submit", {
             method: "POST",
             body: JSON.stringify(state.userState.currentGame!),
             headers: {
-                "authToken": state.userState.authToken,
+                "authToken": newToken.authToken,
                 "gameMode": state.userState.currentGame!.survivalOptions !== null ? "survival" : "limited"
             }
         }).then(r => {
@@ -129,9 +129,9 @@ const Game: FC<UserStateI> = (state: UserStateI) => {
         })
 
         state.setUserState({
-            authToken: state.userState.authToken,
+            authToken: newToken.authToken,
             currentGame: null,
-            refreshToken: state.userState.refreshToken,
+            refreshToken: newToken.refreshToken,
             username: state.userState.username,
             expiry: state.userState.expiry
         });

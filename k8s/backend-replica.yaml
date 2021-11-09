@@ -1,4 +1,4 @@
-apiVersion: guessAskReddit/v1
+apiVersion: apps/v1
 kind: ReplicaSet
 metadata:
   name: backend-replica-set
@@ -15,8 +15,16 @@ spec:
     spec:
       containers:
         - name: backend
-          image: harrisonwaffel/aseekermiddleware
+          image: harrisonwaffel/guess-ask-reddit-backend:v1
+          env:
+            - name: DATABASE_HOST
+              value: "database"
+            - name: DATABASE_PORT
+              value: "5432"
+            - name: DEPLOY_MODE
+              value: "k8s"
   replicas: 2
   selector:
     matchLabels:
-      type: backend
+      lang: go
+      tier: backend

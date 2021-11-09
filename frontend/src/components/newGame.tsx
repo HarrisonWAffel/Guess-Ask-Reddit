@@ -8,7 +8,6 @@ const options = [
     { key: '5', text: '5', value: 5 },
     { key: '10', text: '10', value: 10 },
     { key: '15', text: '15', value: 15 },
-    { key: '-1', text: 'Survival', value: '-1' },
 ]
 
 const NewGame:FC<UserStateI> = (props: UserStateI) => {

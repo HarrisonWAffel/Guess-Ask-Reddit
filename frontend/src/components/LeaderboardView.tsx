@@ -2,6 +2,7 @@ import {FC, useEffect, useState} from "react";
 import {Segment, Table, Header, Button} from "semantic-ui-react";
 import {RedditPost} from "./Game";
 import {UserStateI} from "../App";
+import {GetBackendURL} from "../utils";
 
 declare interface LeaderboardResponse {
     id: string;
@@ -35,7 +36,7 @@ const LeaderboardView: FC<UserStateI> = (state: UserStateI) => {
         switch (type) {
             case "survival":
                 setSurvivalModeTableIsLoading(true);
-                fetch("http://localhost:1337/viewLeaderBoards", {
+                fetch("http://"+GetBackendURL()+"/viewLeaderBoards", {
                     method: "GET",
                     headers: {
                         "mode": "survival",
@@ -58,7 +59,7 @@ const LeaderboardView: FC<UserStateI> = (state: UserStateI) => {
                 setSurvivalModeTableIsLoading(false);
                 break;
             default:
-                fetch("http://localhost:1337/viewLeaderBoards", {
+                fetch("http://"+GetBackendURL()+"/viewLeaderBoards", {
                     method: "GET",
                     headers: {
                         "mode": "limited",

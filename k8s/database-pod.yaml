@@ -1,0 +1,20 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: db
+  labels:
+    app: guess-ask-reddit
+    tier: database
+spec:
+  containers:
+    - name: database
+      image: postgres
+      ports:
+        - containerPort: 5432
+      env:
+        - name: POSTGRES_DB
+          value: "guess"
+        - name: POSTGRES_USER
+          value: "guess"
+        - name: POSTGRES_PASSWORD
+          value: "password123"

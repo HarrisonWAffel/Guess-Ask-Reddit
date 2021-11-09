@@ -26,10 +26,14 @@ export async function RefreshToken(setUserState: React.Dispatch<React.SetStateAc
     return HandleExpiredToken(setUserState)
 }
 
+export function GetBackendURL(): string {
+    return process.env.REACT_APP_BACKEND_HOST+":"+process.env.REACT_APP_BACKEND_PORT;
+}
+
 export async function HandleExpiredToken(setUserState: React.Dispatch<React.SetStateAction<UserState>>): Promise<NewTokens>  {
     // refresh token
     let us = JSON.parse(localStorage.getItem("userState")!);
-    return fetch("http://localhost:1337/refresh", {
+    return fetch("http://"+GetBackendURL()+"/refresh", {
         method: "POST",
         body: JSON.stringify({
             auth_token: us.authToken,

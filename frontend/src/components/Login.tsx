@@ -2,6 +2,7 @@ import React, {FC, useState} from "react";
 import {Button, Divider, Form, Header, Icon, Input, Message, Segment} from "semantic-ui-react";
 import {StartPageI} from "../pages/startpage";
 import About from "./About";
+import {GetBackendURL} from "../utils";
 
 export interface LoginState {
     username: string
@@ -38,7 +39,7 @@ const LoginPage: FC<StartPageI> = ({userState, setUserState, showRegistration, s
             return;
         }
 
-        fetch('http://localhost:1337/login', {
+        fetch("http://"+GetBackendURL()+'/login', {
             method: "POST",
             body: JSON.stringify(
                 {
