@@ -1,0 +1,7 @@
+#!/bin/bash
+
+kubectl create -f database-pod.yaml
+
+kubectl create -f backend-replica.yaml
+
+kubectl create -f frontend-replica.yaml

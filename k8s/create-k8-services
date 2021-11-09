@@ -1,0 +1,8 @@
+#!/bin/bash
+
+kubectl create -f database-service.yaml
+
+kubectl create -f backend-service.yaml
+
+kubectl create -f frontend-service.yaml
+
