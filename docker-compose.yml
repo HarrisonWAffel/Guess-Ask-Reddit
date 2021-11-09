@@ -1,6 +1,6 @@
 services:
   web:
-    image: harrisonwaffel/guess-ask-reddit-frontend
+    image: harrisonwaffel/guess-ask-reddit-frontend:v1
     build: ./frontend
     ports:
       - "8080:3000"

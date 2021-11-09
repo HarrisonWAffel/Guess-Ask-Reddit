@@ -9,6 +9,7 @@ import {
 import GameView from "../components/GameView";
 import LeaderboardView from "../components/LeaderboardView";
 import About from "../components/About";
+import {GetBackendURL} from "../utils";
 
 const HomePage: FC<UserStateI> = ({setUserState, userState}) => {
 
@@ -27,7 +28,7 @@ const HomePage: FC<UserStateI> = ({setUserState, userState}) => {
                     <div  style={{float: "right"}}>
                         <p style={{display: "inline"}}> {userState.username}  </p>
                         <Button onClick={()=>{
-                            fetch("http://localhost:1337/logout", {
+                            fetch("http://"+GetBackendURL()+"/logout", {
                                 method: "POST",
                                 headers: {
                                     "authToken": userState.authToken,

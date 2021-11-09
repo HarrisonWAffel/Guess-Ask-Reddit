@@ -35,6 +35,7 @@ export function useAppCtx() {
 }
 
 function App() {
+    dotenv.config();
     const [userState, setUserState] = useState(JSON.parse(localStorage.getItem("userState") as string) || initialUserState);
     useEffect(() => {
         localStorage.setItem("userState", JSON.stringify(userState))

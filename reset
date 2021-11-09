@@ -1,0 +1,9 @@
+#!/bin/bash
+
+docker stop minikube 
+
+docker container rm minikube -f
+
+docker volume rm minikube -f 
+
+minikube start

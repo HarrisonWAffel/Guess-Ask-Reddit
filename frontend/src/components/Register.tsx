@@ -1,6 +1,7 @@
 import React, {FC, useState} from "react";
 import {Button, Form, Header, Icon, Input, Message, Segment} from "semantic-ui-react";
 import {StartPageI} from "../pages/startpage";
+import {GetBackendURL} from "../utils";
 
 
 export interface registrationState {
@@ -34,7 +35,7 @@ const RegistrationPage: FC<StartPageI> = ({userState, setUserState, showRegistra
             return;
         }
 
-        fetch('http://localhost:1337/register', {
+        fetch("http://"+GetBackendURL()+'/register', {
             method: "POST",
             body: JSON.stringify(
                 {

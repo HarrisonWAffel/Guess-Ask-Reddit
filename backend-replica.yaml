@@ -15,10 +15,14 @@ spec:
     spec:
       containers:
         - name: backend
-          image: harrisonwaffel/guess-ask-reddit-backend
+          image: harrisonwaffel/guess-ask-reddit-backend:v1
           env:
             - name: DATABASE_HOST
-              value: "db"
+              value: "database"
+            - name: DATABASE_PORT
+              value: "5432"
+            - name: DEPLOY_MODE
+              value: "k8s"
   replicas: 2
   selector:
     matchLabels:

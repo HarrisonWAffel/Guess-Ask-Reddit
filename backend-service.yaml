@@ -3,6 +3,7 @@ kind: Service
 metadata:
   name: backend
 spec:
+  type: NodePort
   ports:
     - port: 1337
       targetPort: 1337
