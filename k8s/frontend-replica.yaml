@@ -22,7 +22,7 @@ spec:
             - name: REACT_APP_BACKEND_HOST
               value: "localhost"
             - name: REACT_APP_BACKEND_PORT
-              value: "53730"
+              value: "53730"  # remember to update this before creating the pod, after the k8 service exposed by minikube
   replicas: 2
   selector:
     matchLabels:
